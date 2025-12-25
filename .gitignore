@@ -1,5 +1,10 @@
-/target
+# Rust
+/target/
+
+# Advent of Code inputs & secrets
 inputs/
 .env
 .envrc
+
+# IDEs
 .idea/
