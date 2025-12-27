@@ -1,10 +1,11 @@
 # Rust
 /target/
 
-# Advent of Code inputs & secrets
+# AoC
 inputs/
 .env
 .envrc
 
 # IDEs
 .idea/
+docs/

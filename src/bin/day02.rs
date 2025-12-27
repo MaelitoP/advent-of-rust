@@ -74,7 +74,11 @@ fn is_repeated_twice(n: u64) -> bool {
 }
 
 /// Returns true if `n` is made of a digit block repeated at least twice.
-/// Examples: 1010 ("10" * 2), 1111111 ("1" * 7), 123123123 ("123" * 3)
+///
+/// # Examples:
+/// * 1010 ("10" * 2)
+/// * 1111111 ("1" * 7)
+/// * 123123123 ("123" * 3)
 pub fn is_repeated_block_at_least_twice(n: u64) -> bool {
     let s = n.to_string();
     let bytes = s.as_bytes();
