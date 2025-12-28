@@ -11,9 +11,10 @@ fn part1(input: &str) -> i64 {
     lines(input).map(max_two_digit_subsequence_value).sum()
 }
 
-fn part2(_input: &str) -> i64 {
-    // TODO: implement part 2
-    0
+fn part2(input: &str) -> u128 {
+    lines(input)
+        .map(|line| max_k_digit_subsequence_value(line, 12))
+        .sum()
 }
 
 pub fn max_two_digit_subsequence_value(line: &str) -> i64 {
@@ -45,6 +46,39 @@ pub fn max_two_digit_subsequence_value(line: &str) -> i64 {
     best
 }
 
+pub fn max_k_digit_subsequence_value(line: &str, k: usize) -> u128 {
+    assert!(k > 0, "k must be > 0");
+
+    let n = line.bytes().filter(|b| (b'0'..=b'9').contains(b)).count();
+    assert!(n >= k, "line must contain at least {} digits", k);
+
+    let mut drop = n - k;
+    let mut stack: Vec<u8> = Vec::with_capacity(n);
+
+    for b in line.bytes() {
+        let d = match b {
+            b'0'..=b'9' => b - b'0',
+            _ => continue,
+        };
+
+        while drop > 0 && stack.last().is_some_and(|&last| last < d) {
+            stack.pop();
+            drop -= 1;
+        }
+        stack.push(d);
+    }
+
+    if drop > 0 {
+        stack.truncate(stack.len() - drop);
+    }
+
+    let mut value: u128 = 0;
+    for &d in stack.iter().take(k) {
+        value = value * 10 + d as u128;
+    }
+    value
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -63,6 +97,26 @@ mod tests {
 
     #[test]
     fn part2_example() {
-        assert_eq!(0, part2(EXAMPLE));
+        assert_eq!(3121910778619, part2(EXAMPLE));
+    }
+
+    #[test]
+    fn k_subsequence_examples() {
+        assert_eq!(
+            987654321111,
+            max_k_digit_subsequence_value("987654321111111", 12)
+        );
+        assert_eq!(
+            811111111119,
+            max_k_digit_subsequence_value("811111111111119", 12)
+        );
+        assert_eq!(
+            434234234278,
+            max_k_digit_subsequence_value("234234234234278", 12)
+        );
+        assert_eq!(
+            888911112111,
+            max_k_digit_subsequence_value("818181911112111", 12)
+        );
     }
 }
