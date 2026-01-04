@@ -34,16 +34,20 @@ impl Pos {
 
 pub fn parse_char_grid(s: &str) -> Vec<Vec<char>> {
     s.lines()
+        .map(str::trim)
         .filter(|l| !l.is_empty())
         .map(|l| l.chars().collect())
         .collect()
 }
 
 pub fn in_bounds<T>(g: &[Vec<T>], p: Pos) -> bool {
-    if g.is_empty() {
+    if p.r < 0 || p.c < 0 {
         return false;
     }
-    let h = g.len() as i32;
-    let w = g[0].len() as i32;
-    p.r >= 0 && p.c >= 0 && p.r < h && p.c < w
+    let r = p.r as usize;
+    if r >= g.len() {
+        return false;
+    }
+    let c = p.c as usize;
+    c < g[r].len()
 }
