@@ -22,8 +22,11 @@ fn part1(input: &str) -> usize {
         .count()
 }
 
-fn part2(_input: &str) -> i64 {
-    0
+fn part2(input: &str) -> i64 {
+    let db = parse_database(input).unwrap();
+    let merged = merge_ranges(db.ranges);
+
+    merged.into_iter().map(|(start, end)| end - start + 1).sum()
 }
 
 pub fn parse_database(input: &str) -> Result<Database, &'static str> {
@@ -125,6 +128,6 @@ mod tests {
 
     #[test]
     fn part2_example() {
-        assert_eq!(0, part2(EXAMPLE));
+        assert_eq!(14, part2(EXAMPLE));
     }
 }
